@@ -1,0 +1,90 @@
+<GameWidget>:
+    canvas.before:
+        Rectangle:
+            source: "assets/background.png"
+            size: self.size
+            pos: self.pos
+
+    Widget:
+        id: cannon
+        size_hint: None, None
+        pos: 10, 40
+        size: 150, 67
+ 
+    Widget:
+        id: table
+        size_hint: None, None
+        pos: 10, 0
+        size: 86, 68
+
+    Widget:
+        id: pistol
+        size_hint: None, None
+        pos: 10, 40
+        size: 150, 50
+
+    Widget:
+        id: laser_gun
+        size_hint: None, None
+        pos: 10, 40
+        size: 150, 50
+
+    Widget:
+        id: target
+        size_hint: None, None
+        pos: 800, 300
+        size: 100, 100
+
+<FloatLayout>:
+    Label:
+        id: score_label
+        text: "Score: 0"
+        size_hint: None, None
+        pos_hint: {'x': 0.4, 'y': 0.9}
+        font_size: '20sp'
+        color: 1, 0, 0, 1
+
+    Label:
+        text: "Select Weapon:"
+        size_hint: None, None
+        pos_hint: {'x': 0.4, 'y': 0.8}
+        font_size: '20sp'
+        color: 1, 1, 1, 1
+
+    Button:
+        text: "Cannon"
+        size_hint: 0.1, 0.1
+        pos_hint: {'x': 0.2, 'y': 0.7}
+        on_press: root.ids.game_widget.set_weapon("cannon")
+
+    Button:
+        text: "Pistol"
+        size_hint: 0.1, 0.1
+        pos_hint: {'x': 0.4, 'y': 0.7}
+        on_press: root.ids.game_widget.set_weapon("pistol")
+
+    Button:
+        text: "Laser"
+        size_hint: 0.1, 0.1
+        pos_hint: {'x': 0.6, 'y': 0.7}
+        on_press: root.ids.game_widget.set_weapon("laser")
+
+    Button:
+        text: "<"
+        size_hint: 0.1, 0.1
+        pos_hint: {'right': 1, 'y': 0}
+        on_press: root.ids.game_widget.start_left_rotate()
+        on_release: root.ids.game_widget.stop_left_rotate()
+
+    Button:
+        text: ">"
+        size_hint: 0.1, 0.1
+        pos_hint: {'right': 0.9, 'y': 0}
+        on_press: root.ids.game_widget.start_right_rotate()
+        on_release: root.ids.game_widget.stop_right_rotate()
+
+    Button:
+        text: "Shoot"
+        size_hint: 0.1, 0.1
+        pos_hint: {'right': 0.8, 'y': 0}
+        on_press: root.ids.game_widget.shoot_bullet()

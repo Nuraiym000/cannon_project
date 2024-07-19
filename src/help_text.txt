@@ -1,0 +1,10 @@
+Use the left and right buttons to rotate the cannon
+
+Press the shoot button to fire
+
+Select different weapons to use different types of projectiles
+
+Hit the targets to score points
+
+Game ends after 60 seconds
+
