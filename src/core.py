@@ -22,6 +22,7 @@ def collides(rect1, rect2):
     return r1x < r2x + r2w and r1x + r1w > r2x and r1y < r2y + r2h and r1y + r1h > r2y
 
 
+
 class GameWidget(Widget):
 
     def __init__(self, screen_manager, **kwargs):
@@ -42,7 +43,8 @@ class GameWidget(Widget):
         self.time_left = GAME_TIME
         self.game_over = False
         self.timer_event = None
-
+        self.bullet_speed = 300
+   
         # Loads game assets (Rectangle objects with image sources) onto the canvas.
         with self.canvas:
             self.background = Rectangle(source="assets/bg.jpg", pos=self.pos, size=self.size)
@@ -126,22 +128,21 @@ class GameWidget(Widget):
                 0] / 2
             bullet = {
                 'rect': Rectangle(source="assets/bullet.png", pos=(bullet_start_x, bullet_start_y), size=(30, 20)),
-                'velocity': bullet_velocity,
+                'velocity': (PISTOL_BULL * math.cos(angle_rad), PISTOL_BULL * math.sin(angle_rad)),
                 'angle': self.angle,
                 'type': 'pistol'
             }
         elif self.weapon == "laser":
-            bullet_start_x = self.laser_gun.pos[0] + self.laser_gun.size[0] / 2 + math.cos(angle_rad) * \
-                             self.laser_gun.size[0] / 2
-            bullet_start_y = self.laser_gun.pos[1] + self.laser_gun.size[1] / 2 + math.sin(angle_rad) * \
-                             self.laser_gun.size[0] / 2
+            bullet_start_x = self.laser_gun.pos[0] + self.laser_gun.size[0] / 2 + math.cos(angle_rad) * self.laser_gun.size[0] / 2
+            bullet_start_y = self.laser_gun.pos[1] + self.laser_gun.size[1] / 2 + math.sin(angle_rad) * self.laser_gun.size[0] / 2
             bullet = {
-                'rect': Rectangle(source="assets/laser_bullet.png", pos=(bullet_start_x, bullet_start_y),
-                                  size=(50, 10)),
+                'rect': Rectangle(source="assets/sticker.webp", pos=(bullet_start_x, bullet_start_y),
+                                  size=(30, 20)),
                 'velocity': (LASER_VEL * math.cos(angle_rad), LASER_VEL * math.sin(angle_rad)),
                 'angle': self.angle,
                 'type': 'laser'
             }
+        
         self.bullets.append(bullet)
         self.update_labels()  # Update the labels each time a bullet is shot
 
@@ -221,7 +222,6 @@ class GameWidget(Widget):
             perpetito.pos = self.random_position()
 
 # Clears and redraws the game canvas with updated positions of game objects, bullets, and visual effects.
-
     def update_canvas(self):
         self.canvas.clear()
         with self.canvas:
@@ -261,12 +261,13 @@ class GameWidget(Widget):
 # Weapon Selection (set_weapon), Changes the current weapon (cannon, pistol, laser) and updates bullet speed accordingly.
     def set_weapon(self, weapon):
         self.weapon = weapon
-        if self.weapon == "laser":
-            self.bullet_speed = LASER_VEL
-        elif self.weapon == "pistol":
-            self.bullet_speed = 400
-        else:
-            self.bullet_speed = 300
+        self.update_canvas()
+     
+    def set_custom_velocity(self, velocity):
+        try:
+            self.bullet_speed = int(velocity)
+        except ValueError:
+            self.bullet_speed = 300  # Default value if input is invalid
         self.update_canvas()
 
 

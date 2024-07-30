@@ -7,8 +7,10 @@ from kivy.core.window import Window #Window: Provides access to window propertie
 # Kivy UI components and screen management tools.
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition #NoTransition: A screen transition class that disables transitions between screens.
+from kivy.properties import ObjectProperty
 
 from constants import *
 from core import GameWidget 
@@ -50,6 +52,9 @@ class MainMenuScreen(Screen):
     def start_game(self, instance):
         self.manager.get_screen('game').game_widget.start_game()
         self.manager.current = 'game'
+    
+    def stop_game(self):
+        pass
 
     def continue_game(self, instance):
         if self.manager.get_screen('game').game_widget.time_left > 0:
@@ -131,7 +136,11 @@ class HelpScreen(Screen):
 # Displays labels for score, timer, and weapon selection.
 # Provides buttons for controlling game actions (rotate, shoot).
 # Includes a back button (back_to_menu) to return to the main menu.
+
+
 class GameScreen(Screen):
+    velocity_input = ObjectProperty(None)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = FloatLayout()
@@ -178,6 +187,15 @@ class GameScreen(Screen):
         right_button.bind(on_release=self.game_widget.stop_right_rotate)
         layout.add_widget(right_button)
 
+        custom_velocity_input = TextInput(hint_text='Enter velocity for a cannon', size_hint=(0.2, 0.1),
+                                          pos_hint={'x': 0.8, 'y': 0.7}, multiline=False, input_filter='int')
+        layout.add_widget(custom_velocity_input)
+        self.velocity_input = custom_velocity_input
+
+        set_velocity_button = Button(text="Set Velocity", size_hint=(0.2, 0.1), pos_hint={'x': 0.8, 'y': 0.6})
+        set_velocity_button.bind(on_press=self.set_custom_velocity)
+        layout.add_widget(set_velocity_button)
+
         back_button = Button(text="Back to Menu", size_hint=(0.2, 0.1), pos_hint={'x': 0.8, 'y': 0.9})
         back_button.bind(on_press=self.back_to_menu)
         layout.add_widget(back_button)
@@ -186,13 +204,14 @@ class GameScreen(Screen):
 
     def on_pre_enter(self):
         self.game_widget.screen_manager = self.manager
+    
+    def set_custom_velocity(self, *args):
+        self.game_widget.set_custom_velocity(self.velocity_input.text)
 
     def back_to_menu(self, instance):
         self.game_widget.stop_game()
         self.manager.current = 'menu'
 
-
-# MyApp Class (Kivy Application) build method sets up and returns the ScreenManager.
 # Calls create_table() to initialize the SQLite database.
 # Adds instances of MainMenuScreen, GameScreen, HighScoresScreen, and HelpScreen to the ScreenManager.
 class MyApp(App):

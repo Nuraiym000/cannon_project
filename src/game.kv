@@ -50,7 +50,7 @@
         pos_hint: {'x': 0.4, 'y': 0.8}
         font_size: '20sp'
         color: 1, 1, 1, 1
-
+   
     Button:
         text: "Cannon"
         size_hint: 0.1, 0.1
@@ -68,6 +68,20 @@
         size_hint: 0.1, 0.1
         pos_hint: {'x': 0.6, 'y': 0.7}
         on_press: root.ids.game_widget.set_weapon("laser")
+    
+    TextInput:
+            id: velocity_input
+            hint_text: 'Enter custom velocity'
+            size_hint: (0.2, 0.1)
+            pos_hint: {'x': 0.6, 'y': 0.7}
+            multiline: False
+            input_filter: 'int'
+
+        Button:
+            text: "Set Velocity"
+            size_hint: (0.2, 0.1)
+            pos_hint: {'x': 0.6, 'y': 0.6}
+            on_press: root.set_custom_velocity()
 
     Button:
         text: "<"
@@ -88,3 +102,7 @@
         size_hint: 0.1, 0.1
         pos_hint: {'right': 0.8, 'y': 0}
         on_press: root.ids.game_widget.shoot_bullet()
+
+
+
+    

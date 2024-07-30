@@ -24,3 +24,5 @@ GRAVITY = -100  # Gravity constant, affecting the acceleration of falling object
 
 # Game timing
 GAME_TIME = 60  # Total game time in seconds, which might be the duration of a level or a match
+
+PISTOL_BULL = 400
